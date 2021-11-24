@@ -1,0 +1,80 @@
+#!/usr/bin/env bash
+
+#---------------------------------------------------------------------------------------------
+# Copyright (c) IBODigital GmbH. All rights reserved.
+# Licensed under the MIT License. See License.txt in the project root for license information.
+#---------------------------------------------------------------------------------------------
+
+#
+# Bash script to install on-premise trustkey
+#
+
+# Open Ports (if ufw is installed)
+sudo ufw allow 8080
+sudo ufw allow 8081
+sudo ufw allow 80
+sudo ufw allow 443
+
+# Install mariadb
+sudo ufw allow 3306
+sudo apt-get install mariadb-server -y
+
+sudo mysql -u root -padmin -e "CREATE USER 'trustkeyadmin'@'%' identified by 'trustkeypassword';GRANT ALL PRIVILEGES ON *.* TO 'trustkeyadmin'@'%';FLUSH PRIVILEGES;"
+
+echo '' | sudo tee -a /etc/mysql/my.cnf
+echo '[mysqld]' | sudo tee -a /etc/mysql/my.cnf
+echo 'lower_case_table_names=1' | sudo tee -a /etc/mysql/my.cnf
+sudo /etc/init.d/mariadb restart
+
+# Create envuironment variables
+
+echo '# General Server' >> /home/pi/env_trustkey.conf
+echo 'ENABLE_SSL=false' >> /home/pi/env_trustkey.conf
+echo 'SPHINX_HOST=localhost' >> /home/pi/env_trustkey.conf
+echo '# Database settings' >> /home/pi/env_trustkey.conf
+echo 'MYSQL_USER=trustkeyadmin' >> /home/pi/env_trustkey.conf
+echo 'MYSQL_PASSWORD=trustkeypassword' >> /home/pi/env_trustkey.conf
+echo 'MYSQL_SERVER=localhost' >> /home/pi/env_trustkey.conf
+echo 'MYSQL_DISABLE_SSL=true' >> /home/pi/env_trustkey.conf
+echo '' >> /home/pi/env_trustkey.conf
+echo '# SMTP' >> /home/pi/env_trustkey.conf
+echo 'MAIL_HOST=' >> /home/pi/env_trustkey.conf
+echo 'MAIL_PORT=465' >> /home/pi/env_trustkey.conf
+echo 'MAIL_USERNAME=' >> /home/pi/env_trustkey.conf
+echo 'MAIL_PASSWORD=' >> /home/pi/env_trustkey.conf
+echo 'MAIL_ERROR=' >> /home/pi/env_trustkey.conf
+echo 'MAIL_SENDER=noreply@trustkey.eu' >> /home/pi/env_trustkey.conf
+echo '' >> /home/pi/trustkey.env
+echo '' >> /home/pi/trustkey.env
+
+
+# Install Docker
+sudo apt-get update && sudo apt-get upgrade
+curl -sSL https://get.docker.com | sh
+
+sudo sh -eux <<EOF
+# Install newuidmap & newgidmap binaries
+apt-get install -y uidmap
+EOF
+
+sudo usermod -aG docker ${USER}
+groups ${USER}
+
+sudo apt-get install -y libffi-dev libssl-dev
+sudo apt install -y python3-dev
+sudo apt-get install -y python3 python3-pip
+sudo pip3 install -y docker-compose
+
+sudo systemctl enable docker
+
+dockerd-rootless-setuptool.sh install --force
+
+sudo loginctl enable-linger pi
+
+
+# Install Azure CLI
+sudo apt-get install -y libffi-dev
+sudo apt-get install -y python-dev
+sudo apt-get install -y libssl-dev
+sudo curl -L https://aka.ms/InstallAzureCli | bash
+
