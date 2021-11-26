@@ -10,16 +10,19 @@
 #
 
 # Open Ports (if ufw is installed)
+
+echo "ufw (firewall) statements may fail. You can ignore them if ufw is not installed"
 sudo ufw allow 8080
 sudo ufw allow 8081
 sudo ufw allow 80
 sudo ufw allow 443
+sudo ufw allow 3306
+sudo ufw allow 9312
 
 sudo apt-get update
 sudo apt-get upgrade -y
 
 # Install mariadb
-sudo ufw allow 3306
 sudo apt-get install mariadb-server -y
 
 sudo mysql -u root -padmin -e "CREATE USER 'trustkeyadmin'@'%' identified by 'trustkeypassword';GRANT ALL PRIVILEGES ON *.* TO 'trustkeyadmin'@'%';FLUSH PRIVILEGES;"
@@ -27,17 +30,25 @@ sudo mysql -u root -padmin -e "CREATE USER 'trustkeyadmin'@'%' identified by 'tr
 echo '' | sudo tee -a /etc/mysql/my.cnf
 echo '[mysqld]' | sudo tee -a /etc/mysql/my.cnf
 echo 'lower_case_table_names=1' | sudo tee -a /etc/mysql/my.cnf
+
+# disable the bind address
+sudo sed -e '/bind-address/ s/^#*/#/' -i /etc/mysql/mariadb.conf.d/50-server.cnf
+
 sudo /etc/init.d/mariadb restart
 
+
+
 # Create envuironment variables
+ip4=$(/sbin/ip -o -4 addr list eth0 | awk '{print $4}' | cut -d/ -f1)
+ip6=$(/sbin/ip -o -6 addr list eth0 | awk '{print $4}' | cut -d/ -f1)
 
 echo '# General Server' >> /home/pi/env_trustkey.conf
 echo 'ENABLE_SSL=false' >> /home/pi/env_trustkey.conf
-echo 'SPHINX_HOST=localhost' >> /home/pi/env_trustkey.conf
+echo 'SPHINX_HOST=${ip4}'  >> /home/pi/env_trustkey.conf
 echo '# Database settings' >> /home/pi/env_trustkey.conf
 echo 'MYSQL_USER=trustkeyadmin' >> /home/pi/env_trustkey.conf
 echo 'MYSQL_PASSWORD=trustkeypassword' >> /home/pi/env_trustkey.conf
-echo 'MYSQL_SERVER=localhost' >> /home/pi/env_trustkey.conf
+echo 'MYSQL_SERVER=${ip4}' >> /home/pi/env_trustkey.conf
 echo 'MYSQL_DISABLE_SSL=true' >> /home/pi/env_trustkey.conf
 echo '' >> /home/pi/env_trustkey.conf
 echo '# SMTP' >> /home/pi/env_trustkey.conf
@@ -64,7 +75,7 @@ EOF
 sudo usermod -aG docker ${USER}
 groups ${USER}
 
-sudo apt-get install -y libffi-dev libssl-dev
+sudo apt-get install -y libffi-dev libssl-dev vim
 sudo apt install -y python3-dev
 sudo apt-get install -y python3 python3-pip
 sudo pip3 install -y docker-compose
@@ -75,4 +86,9 @@ dockerd-rootless-setuptool.sh install --force
 
 sudo loginctl enable-linger pi
 
+export PATH=/usr/bin:$PATH
+export DOCKER_HOST=unix:///run/user/1000/docker.sock
+
+echo "Docker will start on boot"
+echo "Finished"
 
