@@ -39,9 +39,10 @@ echo 'MYSQL_DISABLE_SSL=true' >> /home/pi/env_trustkey.conf
 echo '' >> /home/pi/env_trustkey.conf
 echo '# SMTP' >> /home/pi/env_trustkey.conf
 echo 'MAIL_HOST=' >> /home/pi/env_trustkey.conf
-echo 'MAIL_PORT=465' >> /home/pi/env_trustkey.conf
+echo 'MAIL_PORT=' >> /home/pi/env_trustkey.conf
 echo 'MAIL_USERNAME=' >> /home/pi/env_trustkey.conf
 echo 'MAIL_PASSWORD=' >> /home/pi/env_trustkey.conf
+echo 'MAIL_SSL=' >> /home/pi/env_trustkey.conf
 echo 'MAIL_ERROR=' >> /home/pi/env_trustkey.conf
 echo 'MAIL_SENDER=noreply@trustkey.eu' >> /home/pi/env_trustkey.conf
 echo '' >> /home/pi/trustkey.env
@@ -73,8 +74,8 @@ sudo loginctl enable-linger pi
 
 
 # Install Azure CLI
-sudo apt-get install -y libffi-dev
-sudo apt-get install -y python-dev
-sudo apt-get install -y libssl-dev
-sudo curl -L https://aka.ms/InstallAzureCli | bash
+##sudo apt-get install -y libffi-dev
+##sudo apt-get install -y python-dev
+##sudo apt-get install -y libssl-dev
+##sudo curl -L https://aka.ms/InstallAzureCli | bash
 
