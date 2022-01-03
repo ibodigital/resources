@@ -57,8 +57,8 @@ echo 'MAIL_PASSWORD=' >> /home/pi/env_trustkey.conf
 echo 'MAIL_SSL=' >> /home/pi/env_trustkey.conf
 echo 'MAIL_ERROR=' >> /home/pi/env_trustkey.conf
 echo 'MAIL_SENDER=noreply@trustkey.eu' >> /home/pi/env_trustkey.conf
-echo '' >> /home/pi/trustkey.env
-echo '' >> /home/pi/trustkey.env
+echo '' >> /home/pi/env_trustkey.conf
+echo '' >> /home/pi/env_trustkey.conf
 
 
 # Install Docker
@@ -87,6 +87,9 @@ sudo loginctl enable-linger pi
 
 export PATH=/usr/bin:$PATH
 export DOCKER_HOST=unix:///run/user/1000/docker.sock
+
+# create the trustkey network
+docker network create trustkey.net
 
 echo "Docker will start on boot"
 echo ""

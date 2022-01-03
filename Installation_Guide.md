@@ -32,7 +32,7 @@ Install the docker container for trustkey.  You will need an autorizsed docker h
 ```
 docker login
 docker pull ibodigital/trustkey-premise-pi
-docker run --env-file env_trustkey.conf --name trustkey-premise-pi -p 8080:8080 -p 8081:8081 --restart=on-failure -d ibodigital/trustkey-premise-pi
+docker run --env-file env_trustkey.conf --name trustkey-premise-pi -p 8080:8080 -p 8081:8081 --restart on-failure:5 -d ibodigital/trustkey-premise-pi
 ```
 
 To complete the setup point your browser at:
@@ -55,7 +55,7 @@ docker ps
 docker stop <container id>
 docker rm <container id>
 docker pull ibodigital/trustkey-premise-pi
-docker run --env-file env_trustkey.conf --name trustkey-premise-pi -p 8080:8080 -p 8081:8081 --restart=on-failure -d ibodigital/trustkey-premise-pi
+docker run --env-file env_trustkey.conf --name trustkey-premise-pi -p 8080:8080 -p 8081:8081 --restart on-failure:5 -d ibodigital/trustkey-premise-pi
 ```
 
 
@@ -116,6 +116,35 @@ For TLS encryption set `MAIL_SSL=tsl` otherwise leave blank
 
 There are some limitations to running trustkey on arm processor of the raspberry.
 
+* Only http is supported by default. https is available on request. Please contact IBODigital support.
 * Only basic search is available, full content text indexing is not currently supported.
 * PDF generation is not supported (although you can create a print preview and generate the PDF from there)
 
+# Troubleshooting
+
+### Email Validation
+
+If the emails are not working, you can call the following url to determine any possible errors:
+
+http://<your server id>:8080/api/public/sendmail
+
+
+### Container not running
+
+Check the container:
+
+```
+docker ps -a
+```
+
+check the logs
+
+```
+docker logs <container id>
+```
+
+start the container
+
+```
+docker start <container id>
+```
