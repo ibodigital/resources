@@ -42,6 +42,7 @@ sudo /etc/init.d/mariadb restart
 
 echo '# General Server' >> /home/pi/env_trustkey.conf
 echo 'ENABLE_SSL=false' >> /home/pi/env_trustkey.conf
+echo 'EXPOSED_PORT=80' >> /home/pi/env_trustkey.conf
 echo 'SPHINX_HOST='$(/sbin/ip -o -4 addr list eth0 | awk '{print $4}' | cut -d/ -f1)  >> /home/pi/env_trustkey.conf
 echo '# Database settings' >> /home/pi/env_trustkey.conf
 echo 'MYSQL_USER=trustkeyadmin' >> /home/pi/env_trustkey.conf
@@ -97,7 +98,7 @@ echo "Next Steps:"
 echo "sudo reboot"
 echo "docker login"
 echo "docker pull ibodigital/trustkey-premise-pi"
-echo "docker run --env-file env_trustkey.conf --name trustkey-premise-pi -p 8080:8080 -p 8081:8081 --restart=on-failure -d ibodigital/trustkey-premise-pi"
+echo "docker run --env-file env_trustkey.conf --network trustkey.net --name trustkey-premise-pi -p 80:8080 -p 8081:8081 --restart=on-failure -d ibodigital/trustkey-premise-pi"
 echo ""
 echo "Finished"
 
