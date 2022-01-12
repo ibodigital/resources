@@ -29,33 +29,34 @@ No mail server is installed or setup. If you wish to receive emails see configur
 
 Install the docker container for trustkey.  You will need an autorizsed docker hub account to download the docker container
 
+Please ask IBODigital for the latest release tag to ensure that you pull the correct production release.
+
 ```
 docker login
-docker pull ibodigital/trustkey-premise-pi
-docker run --env-file env_trustkey.conf --network trustkey.net --name trustkey-premise-pi -p 80:8080 -p 8081:8081 --restart on-failure:5 -d ibodigital/trustkey-premise-pi
+docker pull ibodigital/trustkey-premise-pi:{tag}
+docker run --env-file env_trustkey.conf --network trustkey.net --name trustkey-premise-pi -p 80:8080 -p 8081:8081 --restart on-failure:5 -d ibodigital/trustkey-premise-pi:{tag}
 ```
 
 To complete the setup point your browser at:
 
 ```
-http://<your server id>:8080/view/register
+http://<your server id>/view/register
 ```
 
-Once logged into trustkey, it is highly recommended that you change your password.  If you have not setup the mailserver, recovery of a forgotton password will be difficult.
+Once logged into trustkey, it is highly recommended that you change your password.  If you have not setup the mailserver, recovery of a forgotton password will not be possible.
 
 * Click on the profile icon (top right) --> Profile --> Change Password
 
 ## Upgrades
 
-trustkey provide weekly updates.  To perform an upgrade of the docker container perform the following
+To perform an upgrade of the docker container perform the following
 
 ```
 docker login
 docker ps
-docker stop <container id>
-docker rm <container id>
-docker pull ibodigital/trustkey-premise-pi
-docker run --env-file env_trustkey.conf --network trustkey.net --name trustkey-premise-pi -p 80:8080 -p 8081:8081 --restart on-failure:5 -d ibodigital/trustkey-premise-pi
+docker rm -f  <container id>
+docker pull ibodigital/trustkey-premise-pi:{tag}
+docker run --env-file env_trustkey.conf --network trustkey.net --name trustkey-premise-pi -p 80:8080 -p 8081:8081 --restart on-failure:5 -d ibodigital/trustkey-premise-pi:{tag}
 ```
 
 
@@ -126,7 +127,7 @@ There are some limitations to running trustkey on arm processor of the raspberry
 
 If the emails are not working, you can call the following url to determine any possible errors:
 
-http://<your server id>:8080/api/public/sendmail
+http://<your server id>/api/public/sendmail
 
 
 ### Container not running
@@ -143,8 +144,4 @@ check the logs
 docker logs <container id>
 ```
 
-start the container
 
-```
-docker start <container id>
-```
