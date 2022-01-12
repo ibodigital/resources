@@ -90,11 +90,12 @@ export PATH=/usr/bin:$PATH
 export DOCKER_HOST=unix:///run/user/1000/docker.sock
 
 # create the trustkey network
-docker network create trustkey.net
+sudo docker network create trustkey.net
 
 echo "Docker will start on boot"
 echo ""
 echo "Next Steps:"
+echo ""
 echo "sudo reboot"
 echo "docker login"
 echo "docker pull ibodigital/trustkey-premise-pi"

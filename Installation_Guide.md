@@ -5,7 +5,7 @@
 
 * Raspberry PI 4 (4GB+)
 * 16GB SD Card (Class 10)
-* Open Ports 3306, 8080, 8081
+* Open Ports 3306, 80, 8081
 * Raspberry PI OS (bullseye)
 * MariaDB 10 or MySql 8
 * mail server (optional)
@@ -32,7 +32,7 @@ Install the docker container for trustkey.  You will need an autorizsed docker h
 ```
 docker login
 docker pull ibodigital/trustkey-premise-pi
-docker run --env-file env_trustkey.conf --name trustkey-premise-pi -p 8080:8080 -p 8081:8081 --restart on-failure:5 -d ibodigital/trustkey-premise-pi
+docker run --env-file env_trustkey.conf --network trustkey.net --name trustkey-premise-pi -p 80:8080 -p 8081:8081 --restart on-failure:5 -d ibodigital/trustkey-premise-pi
 ```
 
 To complete the setup point your browser at:
@@ -55,7 +55,7 @@ docker ps
 docker stop <container id>
 docker rm <container id>
 docker pull ibodigital/trustkey-premise-pi
-docker run --env-file env_trustkey.conf --name trustkey-premise-pi -p 8080:8080 -p 8081:8081 --restart on-failure:5 -d ibodigital/trustkey-premise-pi
+docker run --env-file env_trustkey.conf --network trustkey.net --name trustkey-premise-pi -p 80:8080 -p 8081:8081 --restart on-failure:5 -d ibodigital/trustkey-premise-pi
 ```
 
 
