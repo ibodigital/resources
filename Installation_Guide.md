@@ -14,7 +14,7 @@
 ```
 docker login
 docker pull ibodigital/trustkey-premise-pi:{tag}
-docker run --env-file env_trustkey.conf --network trustkey.net --name trustkey-premise-pi -p 80:8080 -p 8081:8081 --restart on-failure:5 -d ibodigital/trustkey-premise-pi:{tag}
+docker run --env-file env_trustkey.conf --name trustkey-premise-pi -p 80:8080 -p 8081:8081 --restart on-failure:5 -d ibodigital/trustkey-premise-pi:{tag}
 ```
 
 7. Complete trustkey setup at `http://<your server id>/view/register`
@@ -23,7 +23,8 @@ docker run --env-file env_trustkey.conf --network trustkey.net --name trustkey-p
 
 * Raspberry PI 4 (4GB+)
 * 16GB SD Card (Class 10)
-* Open Ports 3306, 80, 8081
+* Fixed IP Address (or DNS name)
+* Open Ports 80, 8081
 * Raspberry PI OS (bullseye)
 * MariaDB 10 or MySql 8
 * mail server (optional)
@@ -51,7 +52,7 @@ Please ask IBODigital for the latest release tag to ensure that you pull the cor
 ```
 docker login
 docker pull ibodigital/trustkey-premise-pi:{tag}
-docker run --env-file env_trustkey.conf --network trustkey.net --name trustkey-premise-pi -p 80:8080 -p 8081:8081 --restart on-failure:5 -d ibodigital/trustkey-premise-pi:{tag}
+docker run --env-file env_trustkey.conf --name trustkey-premise-pi -p 80:8080 -p 8081:8081 --restart on-failure:5 -d ibodigital/trustkey-premise-pi:{tag}
 ```
 
 To complete the setup point your browser at:
@@ -69,11 +70,17 @@ Once logged into trustkey, it is highly recommended that you change your passwor
 To perform an upgrade of the docker container perform the following
 
 ```
+curl -L https://raw.githubusercontent.com/ibodigital/resources/main/UpgradeTrustkeyPi | bash
+```
+
+You can also perform the manual upgrade as follows:
+
+```
 docker login
 docker ps
 docker rm -f  <container id>
 docker pull ibodigital/trustkey-premise-pi:{tag}
-docker run --env-file env_trustkey.conf --network trustkey.net --name trustkey-premise-pi -p 80:8080 -p 8081:8081 --restart on-failure:5 -d ibodigital/trustkey-premise-pi:{tag}
+docker run --env-file env_trustkey.conf --name trustkey-premise-pi -p 80:8080 -p 8081:8081 --restart on-failure:5 -d ibodigital/trustkey-premise-pi:{tag}
 ```
 
 
