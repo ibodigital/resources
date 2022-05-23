@@ -1,5 +1,12 @@
 #!/usr/bin/env bash
 
+echo
+echo "======================================================="
+echo
+echo "This script will install Trustkey on your Raspberry Pi"
+echo
+echo "======================================================="
+
 #
 # Prompt the user for the trustkey version number to install
 #
