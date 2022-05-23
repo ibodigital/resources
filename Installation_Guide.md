@@ -79,6 +79,7 @@ You can also perform the manual upgrade as follows:
 docker login
 docker ps
 docker rm -f  <container id>
+docker system prune --all --force
 docker pull ibodigital/trustkey-premise-pi:{tag}
 docker run --env-file env_trustkey.conf --name trustkey-premise-pi -p 80:8080 -p 8081:8081 --restart on-failure:5 -d ibodigital/trustkey-premise-pi:{tag}
 ```
