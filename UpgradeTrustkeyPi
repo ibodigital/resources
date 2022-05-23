@@ -1,5 +1,14 @@
 #!/usr/bin/env bash
 
+#---------------------------------------------------------------------------------------------
+# Copyright (c) IBODigital GmbH. All rights reserved.
+# Licensed under the MIT License. See License.txt in the project root for license information.
+#---------------------------------------------------------------------------------------------
+
+#
+# Bash script to install on-premise trustkey
+#
+
 echo
 echo "======================================================="
 echo

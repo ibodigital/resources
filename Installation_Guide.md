@@ -70,7 +70,8 @@ Once logged into trustkey, it is highly recommended that you change your passwor
 To perform an upgrade of the docker container perform the following
 
 ```
-curl -L https://raw.githubusercontent.com/ibodigital/resources/main/UpgradeTrustkeyPi | bash
+bash <(curl https://raw.githubusercontent.com/ibodigital/resources/main/UpgradeTrustkeyPi)
+
 ```
 
 You can also perform the manual upgrade as follows:
