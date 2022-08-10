@@ -52,7 +52,7 @@ docker pull ibodigital/trustkey-premise-pi:v$number
 # Once we have it, start the container
 #
 echo "Starting container..."
-cd ../
+cd
 docker run --env-file env_trustkey.conf --name trustkey-premise-pi -p 80:8080 -p 8081:8081 --restart on-failure:5 -d ibodigital/trustkey-premise-pi:v$number
 
 echo "trustkey docker container is now running"
